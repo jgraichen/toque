@@ -76,7 +76,7 @@ describe Toque::Chef, 'loaded into capistrano' do
     end
   end
 
-  describe '#upload_cookbooks' do
+  describe 'toque:chef:setup:cookbooks' do
     before do
       File.stub(:exists?).and_return false
       File.stub(:exists?).with('config/cookbooks').and_return true
@@ -98,6 +98,31 @@ describe Toque::Chef, 'loaded into capistrano' do
       @configuration.toque.chef.setup.cookbooks
 
       expect(@configuration).to have_run 'cd /tmp/toque && tar -xjf cookbooks.tar'
+    end
+  end
+
+  describe 'toque:chef:setup:script' do
+    it 'should upload chef solo script' do
+      @configuration.toque.chef.setup.script
+
+      expect(@configuration).to have_uploaded.to('/tmp/toque/node.rb')
+    end
+  end
+
+  describe 'toque:chef:setup:configuration' do
+    before do
+      @configuration.set :run_list, %w(recipe[awesomeium])
+      @configuration.set :postgres, :version => '9.2', password: -> { { postgresql: 'secret_in_proc' } }
+      @configuration.toque.chef.setup.configuration
+      @node = MultiJson.load @configuration.uploads.keys.first.read
+    end
+
+    it 'should upload node configuration' do
+      expect(@configuration).to have_uploaded.to('/tmp/toque/node.json')
+    end
+
+    it 'should have called option procs' do
+      expect(@node['postgres']['password']).to be == { 'postgresql' => 'secret_in_proc' }
     end
   end
 

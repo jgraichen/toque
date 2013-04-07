@@ -117,9 +117,18 @@ module Toque
               task :configuration do
                 pwd!
 
-                attrs = variables.dup
+                attrs = convert variables.dup
                 attrs[:run_list] = recipes
                 put MultiJson.dump(attrs), pwd("node.json"), :via => :scp
+              end
+
+              def convert(hash)
+                hash.inject({}) do |h, e|
+                  key, value = *e
+                  h[key] = convert value if value.is_a?(Hash)
+                  h[key] = value.call    if value.is_a?(Proc)
+                  h
+                end
               end
             end
 
