@@ -81,8 +81,14 @@ module Toque
 
             desc 'Install chef via omnibus installed if not preset.'
             task :check do
-              install unless installed?
-              install unless installed_version != required_version && !required_version.nil?
+              unless installed?
+                logger.info "No chef install found. Install version #{required_version}."
+                install
+              end
+              if (iv = installed_version) != required_version && !required_version.nil?
+                logger.info "Wrong chef version found: #{iv}. Install version #{required_version}."
+                install
+              end
             end
 
             desc 'Installs chef using omnibus installer.'
