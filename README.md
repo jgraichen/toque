@@ -92,7 +92,7 @@ end
 
 ### Available options
 
-```ruby
+```bash
 $ bundle exec cap toque:config
   * 2013-04-07 21:35:46 executing `toque:config'
 set :chef_debug,                   false
