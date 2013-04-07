@@ -1,4 +1,3 @@
-require 'toque'
 require 'vagrant'
 
 set :application, 'awesomeium'

@@ -17,7 +17,7 @@ Or install it yourself as:
 
     $ gem install toque
 
-After capifying your project add it to your `Capfile` or `deploy.rb`:
+After capifying your project add to your `Capfile`:
 
 ```ruby
 require 'toque'
