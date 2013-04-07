@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'multi_json'
 
 module Toque
 
@@ -118,7 +119,7 @@ module Toque
 
                 attrs = variables.dup
                 attrs[:run_list] = recipes
-                put attrs.to_json, pwd("node.json"), :via => :scp
+                put MultiJson.dump(attrs), pwd("node.json"), :via => :scp
               end
             end
 

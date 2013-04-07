@@ -19,4 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w(lib)
 
   spec.add_dependency 'capistrano'
+  spec.add_dependency 'multi_json'
 end
