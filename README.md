@@ -1,5 +1,7 @@
 # Toque - The cap of a Chef
 
+[![Build Status](https://travis-ci.org/jgraichen/toque.png?branch=master)](https://travis-ci.org/jgraichen/toque)
+
 **Toque** combines the power of *chef-solo* and *capistrano*. It allows you to
 run chef cookbooks with chef-solo as part of your capistrano deploy process.
 
