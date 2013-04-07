@@ -38,7 +38,10 @@ module Toque
           # Search if curl is present
           #
           def curl?
-            !(capture('curl || true') =~ /not found/)
+            run 'curl'
+            true
+          rescue ::Capistrano::CommandError
+            false
           end
 
           # Install curl if not present

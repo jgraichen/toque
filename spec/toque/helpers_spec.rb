@@ -27,13 +27,26 @@ describe Toque::Helpers, 'loaded into capistrano' do
 
   describe '#curl?' do
     it 'return true if curl exists' do
-      @configuration.stub_command 'curl || true', data: "curl: try 'curl --help' or 'curl --manual' for more information"
+      @configuration.stub_command 'curl', data: "curl: try 'curl --help' or 'curl --manual' for more information"
       expect(@configuration.toque.curl?).to be_true
     end
 
     it 'return false if curl is missing' do
-      @configuration.stub_command 'curl || true', data: "sh: command not found"
+      @configuration.stub_command 'curl', fail: true
       expect(@configuration.toque.curl?).to be_false
+    end
+  end
+
+  describe '#require_curl' do
+    it 'should install curl if not present' do
+      @configuration.stub_command 'curl', fail: true
+      @configuration.stub_command "sudo -p 'sudo password: ' apt-get install --no-install-recommends -yq curl" do |_|
+        @configuration.stub_command 'curl', data: "curl: try 'curl --help' or 'curl --manual' for more information"
+      end
+
+      expect(@configuration.toque.curl?).to be_false
+      @configuration.toque.require_curl
+      expect(@configuration.toque.curl?).to be_true
     end
   end
 end
