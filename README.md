@@ -92,6 +92,10 @@ Thanks to [roundsman](https://github.com/iain/roundsman) doing even some more
 tasks like installing ruby and chef via rubygems. I've decided to make up
 something new to use omnibus installer right from the start.
 
+Also take a look at
+[capistrano-spec](https://github.com/technicalpickles/capistrano-spec) allowing
+some really great capistrano testing.
+
 ## Contributing
 
 1. Fork it
