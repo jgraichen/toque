@@ -30,7 +30,7 @@ installed on first `run_list` call. **Toque** uses chef omnibus installer to
 install a complete self-contained embedded chef environment.
 
 You can specify a specific chef version by setting `:chef_version` to
-something different to `nil`. If an already install with a different version
+something different to `nil`. If an already installed chef with a different version
 exists **toque** will run omnibus installer with specified version to
 override installed chef.
 
