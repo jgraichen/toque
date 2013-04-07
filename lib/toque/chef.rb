@@ -1,3 +1,5 @@
+require 'tempfile'
+
 module Toque
 
   # Tasks and method to interact with chef.
@@ -86,7 +88,7 @@ module Toque
               task :cookbooks do
                 pwd!
 
-                tar = Tempfile.new("cookbooks.tar")
+                tar = ::Tempfile.new("cookbooks.tar")
                 begin
                   tar.close
                   system "tar -cjf #{tar.path} #{cookbooks_paths.join(' ')} #{databags_path.to_s}"
