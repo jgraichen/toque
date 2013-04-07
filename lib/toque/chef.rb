@@ -15,7 +15,7 @@ module Toque
             set_default :chef_omnibus_installer_url, 'http://www.opscode.com/chef/install.sh'
             set_default :cookbooks_paths, %w(config/cookbooks vendor/cookbooks)
             set_default :databags_path, 'config/databags'
-            set_default :chef_version, :latest
+            set_default :chef_version, '10.24.0'
             set_default :chef_debug, false
             set_default :chef_solo, '/opt/chef/bin/chef-solo'
 
@@ -65,8 +65,14 @@ module Toque
             #
             def install_command
               cmd = "#{top.sudo} bash"
-              cmd += " -s -- -v #{fetch :chef_version}" unless fetch(:chef_version) == :latest or fetch(:chef_version).nil?
+              cmd += " -s -- -v #{required_version}" unless required_version.nil?
               cmd
+            end
+
+            # Return required chef version.
+            #
+            def required_version
+              fetch(:chef_version) || nil
             end
 
             #
@@ -76,6 +82,7 @@ module Toque
             desc 'Install chef via omnibus installed if not preset.'
             task :check do
               install unless installed?
+              install unless installed_version != required_version && !required_version.nil?
             end
 
             desc 'Installs chef using omnibus installer.'
