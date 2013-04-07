@@ -123,11 +123,20 @@ module Toque
               end
 
               def convert(hash)
-                hash.inject({}) do |h, e|
-                  key, value = *e
-                  h[key] = convert value if value.is_a?(Hash)
-                  h[key] = value.call    if value.is_a?(Proc)
-                  h
+                hash.inject({}) do |attributes, element|
+                  key, value = *element
+
+                  begin
+                    value = value.call    if value.respond_to? :call
+                    value = convert value if value.is_a?(Hash)
+                    value = nil           if value.class.to_s.include? 'Capistrano'
+                    attributes[key] = value    unless value.nil?
+                  rescue ::Capistrano::CommandError => error
+                    logger.debug "Could not get the value of #{key}: #{error.message}"
+                    nil
+                  end
+
+                  attributes
                 end
               end
             end
