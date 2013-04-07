@@ -46,12 +46,13 @@ module Toque
             #
             def upload_cookbooks
               ensure_cookbooks!
+              pwd!
 
               tar = Tempfile.new("cookbooks.tar")
               begin
                 tar.close
                 system "tar -cjf #{tar.path} #{cookbooks_paths.join(' ')} #{databags_path.to_s}"
-                upload tar.path, toque.pwd!("cookbooks.tar"), :via => :scp
+                upload tar.path, toque.pwd("cookbooks.tar"), :via => :scp
                 run "cd #{toque.pwd} && tar -xjf cookbooks.tar"
               ensure
                 tar.unlink

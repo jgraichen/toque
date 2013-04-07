@@ -63,6 +63,12 @@ describe Toque::Chef, 'loaded into capistrano' do
       File.stub(:exists?).with('config/cookbooks').and_return true
     end
 
+    it 'should create working dir' do
+      @configuration.toque.chef.upload_cookbooks
+
+      expect(@configuration).to have_run 'mkdir -p /tmp/toque'
+    end
+
     it 'should upload cookbooks' do
       @configuration.toque.chef.upload_cookbooks
 
