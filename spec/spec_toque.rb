@@ -21,13 +21,14 @@ describe Toque do
 
       # Toque options
       set :cookbooks_paths, %w(spec/config/cookbooks)
+      set :chef_version, '10.24.0'
 
       task :awesome! do
-        toque.run_list "recipe[awesomeium]"
+        toque.run_list 'recipe[awesomeium]'
       end
 
       task :awesome_the_second! do
-        toque.run_list "recipe[awesomeium::second]"
+        toque.run_list 'recipe[awesomeium::second]'
       end
     end
 
@@ -35,13 +36,13 @@ describe Toque do
     @configuration.sudo 'apt-get autoremove -yq'
   end
 
-  after do
-    #@vagrant.cli 'destroy', '--force'
-  end
-
   it 'should write an awesome file' do
     @configuration.awesome!
 
+    # should have installed chef version
+    expect(@configuration.capture('/opt/chef/bin/chef-solo -v')).to be == 'Chef: 10.24.0'
+
+    # should have executed cookbook and created an awesome file
     file_exists = @vagrant.primary_vm.channel.sudo 'ls /tmp/toque/awesome'
     expect(file_exists).to be == 0
 
@@ -50,4 +51,4 @@ describe Toque do
     file_exists = @vagrant.primary_vm.channel.sudo 'ls /tmp/toque/awesome', :error_check => false
     expect(file_exists).to_not be == 0
   end
-end unless ENV['CI']
+end

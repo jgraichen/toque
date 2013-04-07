@@ -104,4 +104,4 @@ some really great capistrano testing.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-You can run a simple vagrant based test by running `bundle exec rspec spec/toque.rb`.
+You can run a simple vagrant based test by running `bundle exec rspec spec/spec_toque.rb`.
