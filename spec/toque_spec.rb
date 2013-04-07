@@ -50,4 +50,4 @@ describe Toque do
     file_exists = @vagrant.primary_vm.channel.sudo 'ls /tmp/toque/awesome', :error_check => false
     expect(file_exists).to_not be == 0
   end
-end
+end unless ENV['CI']
