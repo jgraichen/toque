@@ -1,4 +1,4 @@
-# Toque - Cap of a Chef
+# Toque - The cap of a Chef
 
 **Toque** combines the power of *chef-solo* and *capistrano*. It allows you to
 run chef cookbooks with chef-solo as part of your capistrano deploy process.
