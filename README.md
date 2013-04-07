@@ -1,6 +1,6 @@
-# Toque
+# Toque - Cap of a Chef
 
-TODO: Write a gem description
+**Toque** combines the power of *chef-solo* and *capistrano*. It allows you
 
 ## Installation
 

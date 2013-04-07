@@ -7,20 +7,28 @@ describe Toque::Chef, 'loaded into capistrano' do
     Toque.load_into(@configuration)
   end
 
+  it 'should define default omnibus installer URL' do
+    expect(@configuration.fetch :chef_omnibus_installer_url).to be == 'http://www.opscode.com/chef/install.sh'
+  end
+
+  it "defines toque:chef:install task" do
+    expect(@configuration.find_task 'toque:chef:install').to_not be_nil
+  end
+
   describe '#installed?' do
     it 'detect if chef-solo is not installed' do
       expect(@configuration.toque.chef.installed?).to be_false
     end
 
     it 'detect if chef-solo is installed' do
-      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef 11.4.0'
+      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef: 11.4.0'
       expect(@configuration.toque.chef.installed?).to be_true
     end
   end
 
   describe '#installed_version' do
     it 'should fetch installed chef version' do
-      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef 11.4.0'
+      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef: 11.4.0'
       expect(@configuration.toque.chef.installed_version).to be == '11.4.0'
     end
   end
@@ -75,21 +83,47 @@ describe Toque::Chef, 'loaded into capistrano' do
     end
 
     it 'should create working dir' do
-      @configuration.toque.chef.upload_cookbooks
+      @configuration.toque.chef.setup.cookbooks
 
       expect(@configuration).to have_run 'mkdir -p /tmp/toque'
     end
 
     it 'should upload cookbooks' do
-      @configuration.toque.chef.upload_cookbooks
+      @configuration.toque.chef.setup.cookbooks
 
       expect(@configuration).to have_uploaded.to('/tmp/toque/cookbooks.tar')
     end
 
     it 'should extract cookbooks on server' do
-      @configuration.toque.chef.upload_cookbooks
+      @configuration.toque.chef.setup.cookbooks
 
       expect(@configuration).to have_run 'cd /tmp/toque && tar -xjf cookbooks.tar'
+    end
+  end
+
+  describe 'toque:chef:install' do
+
+    it 'should install chef using omnibus installer' do
+      @configuration.toque.chef.install
+      expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://www.opscode.com/chef/install.sh | sudo -p 'sudo password: ' bash")
+    end
+
+    context 'with custom installer URL' do
+      before { @configuration.set :chef_omnibus_installer_url, 'http://mysrv.tld/inst.sh' }
+
+      it 'should install chef using custom omnibus installer' do
+        @configuration.toque.chef.install
+        expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://mysrv.tld/inst.sh | sudo -p 'sudo password: ' bash")
+      end
+    end
+
+    context 'with specific chef version' do
+      before { @configuration.set :chef_version, '10.24.0' }
+
+      it 'should install chef using custom omnibus installer' do
+        @configuration.toque.chef.install
+        expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://www.opscode.com/chef/install.sh | sudo -p 'sudo password: ' bash -s -- -v 10.24.0")
+      end
     end
   end
 end

@@ -24,7 +24,7 @@ module Toque
           # Return toque remote working directory.
           #
           def pwd(*path)
-            File.join(fetch(:toque_pwd), *path)
+            File.join(fetch(:toque_pwd).to_s, *path.map(&:to_s))
           end
           set_default :toque_pwd, '/tmp/toque'
 
@@ -33,6 +33,18 @@ module Toque
           def pwd!(*path)
             run "mkdir -p #{pwd = pwd(*path)}"
             pwd
+          end
+
+          # Search if curl is present
+          #
+          def curl?
+            !(capture('curl || true') =~ /not found/)
+          end
+
+          # Install curl if not present
+          #
+          def require_curl
+            sudo 'apt-get install --no-install-recommends -yq curl' unless curl?
           end
 
           desc 'List current toque configuration'

@@ -8,8 +8,8 @@ module Toque
           # Run list of recipes. Install chef if not already preset.
           #
           def run_list(*recipes)
-            omnibus.install unless chef.installed?
-            chef.run_list *recipes
+            set :run_list, recipes
+            chef.run_list
           end
 
         end

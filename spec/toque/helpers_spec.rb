@@ -24,4 +24,16 @@ describe Toque::Helpers, 'loaded into capistrano' do
       expect(@configuration).to have_run 'mkdir -p /tmp/toque'
     end
   end
+
+  describe '#curl?' do
+    it 'return true if curl exists' do
+      @configuration.stub_command 'curl || true', data: "curl: try 'curl --help' or 'curl --manual' for more information"
+      expect(@configuration.toque.curl?).to be_true
+    end
+
+    it 'return false if curl is missing' do
+      @configuration.stub_command 'curl || true', data: "sh: command not found"
+      expect(@configuration.toque.curl?).to be_false
+    end
+  end
 end
