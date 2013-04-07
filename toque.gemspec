@@ -20,4 +20,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'capistrano'
   spec.add_dependency 'multi_json'
+
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'vagrant', '>= 1.0.7'
+  spec.add_development_dependency 'bundler', '~> 1.3'
+  spec.add_development_dependency 'capistrano-spec', '~> 0.3'
 end
