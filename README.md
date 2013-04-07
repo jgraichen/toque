@@ -103,3 +103,5 @@ some really great capistrano testing.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+You can run a simple vagrant based test by running `bundle exec rspec spec/toque.rb`.
