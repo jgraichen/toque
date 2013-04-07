@@ -7,6 +7,7 @@ module Toque
     def self.load_into(configuration)
       configuration.load do
 
+        set :chef_version, :latest
         set :chef_omnibus_installer_url, 'http://www.opscode.com/chef/install.sh'
 
         namespace :toque do
@@ -14,13 +15,13 @@ module Toque
 
             def omnibus_bash_cmd # :nodoc:
               cmd = "#{top.sudo} bash"
-              cmd += "-s -- -v #{fetch :chef_version}" unless fetch(:chef_version) == :default
+              cmd += " -s -- -v #{fetch :chef_version}" unless fetch(:chef_version) == :latest
               cmd
             end
 
             desc 'Installs chef using omnibus installer.'
             task :install do
-              sudo "#{top.sudo} true && curl -L #{fetch :chef_omnibus_installer_url} | #{omnibus_bash_cmd}"
+              run "#{top.sudo} true && curl -L #{fetch :chef_omnibus_installer_url} | #{omnibus_bash_cmd}"
             end
           end
         end
