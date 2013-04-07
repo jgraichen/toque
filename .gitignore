@@ -5,6 +5,7 @@
 .config
 .yardoc
 .idea
+.vagrant
 Gemfile.lock
 InstalledFiles
 _yardoc
