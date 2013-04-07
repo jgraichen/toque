@@ -1,4 +1,6 @@
 language: ruby
+before_script:
+  - apt-get install -yq virtualbox
 rvm:
   - 2.0.0
   - 1.9.3
