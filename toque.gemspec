@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Toque::VERSION
   spec.authors       = ['Jan Graichen']
   spec.email         = %w(jg@altimos.de)
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Toque: Cap of a Chef. Integrate Chef into Capistrano.}
+  spec.summary       = %q{Toque: Cap of a Chef. Integrate Chef into Capistrano.}
   spec.homepage      = 'https://github.com/jgraichen/toque'
   spec.license       = 'MIT'
 
