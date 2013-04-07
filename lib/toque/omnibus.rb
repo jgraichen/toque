@@ -7,10 +7,11 @@ module Toque
     def self.load_into(configuration)
       configuration.load do
 
-        set :chef_version, :latest
-        set :chef_omnibus_installer_url, 'http://www.opscode.com/chef/install.sh'
-
         namespace :toque do
+
+          set_default :chef_version, :latest
+          set_default :chef_omnibus_installer_url, 'http://www.opscode.com/chef/install.sh'
+
           namespace :omnibus do
 
             def omnibus_bash_cmd # :nodoc:
