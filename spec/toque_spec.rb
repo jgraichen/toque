@@ -40,8 +40,6 @@ describe Toque do
   end
 
   it 'should write an awesome file' do
-    pending 'Skip in CI' if ENV['CI']
-
     @configuration.awesome!
 
     file_exists = @vagrant.primary_vm.channel.sudo 'ls /tmp/toque/awesome'
