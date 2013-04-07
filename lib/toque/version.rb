@@ -3,7 +3,7 @@ module Toque
     MAJOR = 1
     MINOR = 0
     PATCH = 0
-    STAGE = :dev
+    STAGE = nil
 
     STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
 
