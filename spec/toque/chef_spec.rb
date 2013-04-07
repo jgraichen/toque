@@ -127,7 +127,6 @@ describe Toque::Chef, 'loaded into capistrano' do
   end
 
   describe 'toque:chef:install' do
-
     it 'should install chef using omnibus installer' do
       @configuration.toque.chef.install
       expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://www.opscode.com/chef/install.sh | sudo -p 'sudo password: ' bash -s -- -v 10.24.0")
@@ -149,6 +148,13 @@ describe Toque::Chef, 'loaded into capistrano' do
         @configuration.toque.chef.install
         expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://www.opscode.com/chef/install.sh | sudo -p 'sudo password: ' bash -s -- -v 10.24.0")
       end
+    end
+  end
+
+  describe 'toque:chef:check' do
+    it 'should install chef using omnibus installer if not present' do
+      @configuration.toque.chef.check
+      expect(@configuration).to have_run("sudo -p 'sudo password: ' true && curl -L http://www.opscode.com/chef/install.sh | sudo -p 'sudo password: ' bash -s -- -v 10.24.0")
     end
   end
 end
