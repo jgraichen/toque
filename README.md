@@ -64,9 +64,11 @@ end
 After deploying your app you may need to create a config for your application
 like `database.yml` or redis configuration:
 
+```ruby
 after "deploy:create_symlink" do
   toque.run_list 'recipe[awesome::configure]'
 end
+```
 
 ## Configuration
 
@@ -86,6 +88,21 @@ template File.join(node[:deploy_to], 'config', 'database.yml') do
   owner node[:user]
   recursive true
 end
+```
+
+### Available options
+
+```ruby
+$ bundle exec cap toque:config
+  * 2013-04-07 21:35:46 executing `toque:config'
+set :chef_debug,                   false
+set :chef_omnibus_installer_url,   "http://www.opscode.com/chef/install.sh"
+set :chef_solo,                    "/opt/chef/bin/chef-solo"
+set :chef_version,                 :latest
+set :cookbooks_paths,              ["config/cookbooks", "vendor/cookbooks"]
+set :databags_path,                "config/databags"
+set :toque_pwd,                    "/tmp/toque"
+
 ```
 
 ## Thanks
