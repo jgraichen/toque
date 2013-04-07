@@ -13,14 +13,14 @@ describe Toque::Chef, 'loaded into capistrano' do
     end
 
     it 'detect if chef-solo is installed' do
-      @configuration.stub_command 'chef-solo -v || true', data: 'Chef 11.4.0'
+      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef 11.4.0'
       expect(@configuration.toque.chef.installed?).to be_true
     end
   end
 
   describe '#installed_version' do
     it 'should fetch installed chef version' do
-      @configuration.stub_command 'chef-solo -v || true', data: 'Chef 11.4.0'
+      @configuration.stub_command '/opt/chef/bin/chef-solo -v || true', data: 'Chef 11.4.0'
       expect(@configuration.toque.chef.installed_version).to be == '11.4.0'
     end
   end
@@ -54,6 +54,17 @@ describe Toque::Chef, 'loaded into capistrano' do
       File.stub(:exists?).with('config/databags').and_return false
 
       expect(@configuration.toque.chef.databags_path).to be_nil
+    end
+  end
+
+  describe '#chef_solo' do
+    it 'should return path to chef solo executable' do
+      expect(@configuration.toque.chef.chef_solo).to be == '/opt/chef/bin/chef-solo'
+    end
+
+    it 'should return path to custom chef solo executable' do
+      @configuration.set :chef_solo, 'chef-solo'
+      expect(@configuration.toque.chef.chef_solo).to be == 'chef-solo'
     end
   end
 

@@ -11,6 +11,9 @@ module Toque
 
             set_default :cookbooks_paths, %w(config/cookbooks vendor/cookbooks)
             set_default :databags_path, 'config/databags'
+            set_default :chef_version, :latest
+            set_default :chef_solo, '/opt/chef/bin/chef-solo'
+            set_default :chef_debug, false
 
             # Check if chef-solo installed on remote machine.
             #
@@ -21,7 +24,11 @@ module Toque
             # Return installed chef-solo version.
             #
             def installed_version
-              capture('chef-solo -v || true') =~ /Chef (\d+\.\d+\.\d+)/ ? $1 : nil
+              capture("#{chef_solo} -v || true") =~ /Chef (\d+\.\d+\.\d+)/ ? $1 : nil
+            end
+
+            def chef_solo
+              fetch(:chef_solo).to_s || 'chef-solo'
             end
 
             # Return list of existing cookbook paths.
@@ -45,7 +52,6 @@ module Toque
             # Upload cookbooks to remote server.
             #
             def upload_cookbooks
-              ensure_cookbooks!
               pwd!
 
               tar = Tempfile.new("cookbooks.tar")
@@ -57,6 +63,40 @@ module Toque
               ensure
                 tar.unlink
               end
+            end
+
+            # Generate and upload chef solo script
+            #
+            def upload_script
+              cookbooks = cookbooks_paths.map { |p| %("#{pwd p}") }.join(', ')
+              solo = <<-HEREDOC
+                file_cache_path "#{pwd! 'cache'}"
+                cookbook_path [ #{cookbooks} ]
+                data_bag_path "#{pwd databags_path}"
+              HEREDOC
+              put solo, pwd("solo.rb"), :via => :scp
+            end
+
+            # Generate and upload node configuration
+            #
+            def upload_configuration(*recipes)
+              attrs = variables.dup
+              attrs[:run_list] = recipes
+              put attrs.to_json, pwd("node.json"), :via => :scp
+            end
+
+            # Runs a list of recipes.
+            #
+            def run_list(*recipes)
+              ensure_cookbooks!
+              pwd!
+
+              upload_script
+              upload_configuration *recipes
+
+              logger.info "Now running #{recipes.join(', ')}"
+
+              sudo "#{chef_solo} -c #{pwd "solo.rb"} -j #{pwd "solo.json"}#{' -l debug' if fetch(:chef_debug)}"
             end
 
           end
