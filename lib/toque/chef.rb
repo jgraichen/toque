@@ -34,6 +34,12 @@ module Toque
               fetch(:chef_solo).to_s || 'chef-solo'
             end
 
+            # Return list of current recipes in run_list.
+            #
+            def recipes
+              Array fetch(:run_list)
+            end
+
             # Return list of existing cookbook paths.
             #
             def cookbooks_paths
@@ -109,7 +115,7 @@ module Toque
                 pwd!
 
                 attrs = variables.dup
-                attrs[:run_list] = fetch(:run_list).to_a
+                attrs[:run_list] = recipes
                 put attrs.to_json, pwd("node.json"), :via => :scp
               end
             end
