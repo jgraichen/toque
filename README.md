@@ -1,4 +1,4 @@
-# Toque - The cap of a Chef
+# Toque - The Cap of a Chef
 
 [![Build Status](https://travis-ci.org/jgraichen/toque.png?branch=master)](https://travis-ci.org/jgraichen/toque)
 
@@ -95,15 +95,14 @@ end
 
 ```bash
 $ bundle exec cap toque:config
-  * 2013-04-07 21:35:46 executing `toque:config'
+  * 2013-04-08 09:02:33 executing `toque:config'
 set :chef_debug,                   false
 set :chef_omnibus_installer_url,   "http://www.opscode.com/chef/install.sh"
 set :chef_solo,                    "/opt/chef/bin/chef-solo"
-set :chef_version,                 :latest
+set :chef_version,                 "10.24.0"
 set :cookbooks_paths,              ["config/cookbooks", "vendor/cookbooks"]
 set :databags_path,                "config/databags"
 set :toque_pwd,                    "/tmp/toque"
-
 ```
 
 ## Thanks
